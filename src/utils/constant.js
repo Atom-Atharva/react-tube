@@ -8,3 +8,6 @@ export const YOUTUBE_API_CHANNEL =
     "https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&key=" +
     GOOGLE_API_KEY +
     "&id=";
+
+export const YOUTUBE_SEARCH_API =
+    "http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=";

@@ -1,9 +1,43 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
+import { YOUTUBE_SEARCH_API } from "../utils/constant";
+import { cacheResults } from "../utils/searchSlice";
 
 const Head = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const searchCache = useSelector((store) => store.search);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        // console.log(searchQuery);
+
+        // API Call on every key press.
+        // Decline it if difference between 2 key press <200ms
+        const timer = setTimeout(() => {
+            if (searchCache[searchQuery]) {
+                setSuggestions(searchCache[searchQuery]);
+            } else {
+                getSearchSuggestions();
+            }
+        }, 200);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchQuery]);
+
+    const getSearchSuggestions = async () => {
+        const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+        const json = await data.json();
+
+        console.log(json[1]);
+        setSuggestions(json[1]);
+        dispatch(cacheResults({ [searchQuery]: json[1] }));
+    };
+
     const toggleMenuHandler = () => {
         dispatch(toggleMenu());
     };
@@ -25,20 +59,46 @@ const Head = () => {
                     />
                 </a>
             </div>
-            <div className="col-span-10 ml-44 flex">
-                <input
-                    type="text"
-                    placeholder="Search"
-                    className="w-1/2 px-4 p-2 border border-gray-400 rounded-l-full"
-                />
-                <button className="border border-gray-400 px-4 py-2 rounded-r-full bg-gray-200 hover:bg-gray-300">
-                    <img
-                        alt="Search"
-                        className="h-6"
-                        src="https://www.svgrepo.com/show/114667/search.svg"
+            <div className="col-span-10 ml-44">
+                <div className="flex">
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        className="w-1/2 px-4 p-2 border border-gray-400 rounded-l-full"
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onFocus={() => setShowSuggestions(true)}
+                        onBlur={() => setShowSuggestions(false)}
                     />
-                </button>
+                    <button className="border border-gray-400 px-4 py-2 rounded-r-full bg-gray-200 hover:bg-gray-300">
+                        <img
+                            alt="Search"
+                            className="h-6"
+                            src="https://www.svgrepo.com/show/114667/search.svg"
+                        />
+                    </button>
+                </div>
+
+                {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute bg-white py-2 w-[31rem] mt-2 rounded-lg shadow-md border border-gray-100">
+                        <ul>
+                            {suggestions.map((suggestion) => (
+                                <li
+                                    key={suggestion}
+                                    className="py-2 px-5 flex shadow-sm hover:bg-gray-100"
+                                >
+                                    <img
+                                        alt="Search"
+                                        className="h-5 mr-2"
+                                        src="https://www.svgrepo.com/show/114667/search.svg"
+                                    />
+                                    {suggestion}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
+
             <div className="col-span-1">
                 <img
                     className="h-8"

@@ -16,11 +16,7 @@ ReactTube is a front-end project built with the React framework and related tech
 
 -   **Search Functionality:** Users can search for specific videos using the search bar, with the results dynamically updating as they type.
 
--   **User Authentication:** ReactTube includes user authentication features, allowing users to create accounts, log in, and personalize their experience.
-
 -   **Like and Comment:** Registered users can like videos and leave comments, fostering community engagement.
-
--   **Subscription System:** Users can subscribe to channels and receive updates on new videos uploaded by their subscribed channels.
 
 ## Technologies Used
 
@@ -43,6 +39,15 @@ ReactTube is a front-end project built with the React framework and related tech
 -   **iFrame:** For video payback.
 
 -   **useSearchParams Hook:** Used to get query params from url.
+
+-   **Debouncing:** Powerful technique used to optimize event handling by delaying the execution of function.
+
+    -   Prevents excessive function calls
+    -   Increase performance of application.
+    -   Debouncing with 200ms -->
+        -   If difference between 2 key strokes is <200ms --> Decline API Call else make API Call and show result.
+
+-   **Caching Search Results:** Used for later reusability, saves repeated API Calls.
 
 ## Getting Started
 

@@ -16,11 +16,10 @@ const VideoCard = ({ info }) => {
         const json = await data.json();
 
         setChannelInfo(json.items[0]);
-        console(json)
     };
 
     return (
-        <div className="p-2 m-2 w-[26rem] shadow-lg rounded-lg">
+        <div className="p-2 m-2 w-[26rem] h-[25rem] shadow-lg rounded-lg">
             <img
                 className="rounded-lg w-full"
                 src={thumbnails?.maxres?.url || thumbnails?.medium?.url}
