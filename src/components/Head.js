@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/constant";
 import { cacheResults } from "../utils/searchSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 const Head = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -10,6 +11,8 @@ const Head = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const searchCache = useSelector((store) => store.search);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const inputRef = useRef(null);
 
     useEffect(() => {
         // console.log(searchQuery);
@@ -33,13 +36,20 @@ const Head = () => {
         const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
         const json = await data.json();
 
-        console.log(json[1]);
         setSuggestions(json[1]);
         dispatch(cacheResults({ [searchQuery]: json[1] }));
     };
 
     const toggleMenuHandler = () => {
         dispatch(toggleMenu());
+    };
+
+    const handleSearchClick = (search) => {
+        if (search === "") {
+            return;
+        } else {
+            navigate("/results?search_query=" + search);
+        }
     };
 
     return (
@@ -67,9 +77,18 @@ const Head = () => {
                         className="w-1/2 px-4 p-2 border border-gray-400 rounded-l-full"
                         onChange={(e) => setSearchQuery(e.target.value)}
                         onFocus={() => setShowSuggestions(true)}
-                        onBlur={() => setShowSuggestions(false)}
+                        onBlur={() =>
+                            setTimeout(() => {
+                                setShowSuggestions(false);
+                            }, 200)
+                        }
+                        ref={inputRef}
                     />
-                    <button className="border border-gray-400 px-4 py-2 rounded-r-full bg-gray-200 hover:bg-gray-300">
+
+                    <button
+                        className="border border-gray-400 px-4 py-2 rounded-r-full bg-gray-200 hover:bg-gray-300"
+                        onClick={() => handleSearchClick(searchQuery)}
+                    >
                         <img
                             alt="Search"
                             className="h-6"
@@ -81,19 +100,35 @@ const Head = () => {
                 {showSuggestions && suggestions.length > 0 && (
                     <div className="absolute bg-white py-2 w-[31rem] mt-2 rounded-lg shadow-md border border-gray-100">
                         <ul>
-                            {suggestions.map((suggestion) => (
-                                <li
-                                    key={suggestion}
-                                    className="py-2 px-5 flex shadow-sm hover:bg-gray-100"
-                                >
-                                    <img
-                                        alt="Search"
-                                        className="h-5 mr-2"
-                                        src="https://www.svgrepo.com/show/114667/search.svg"
-                                    />
-                                    {suggestion}
-                                </li>
-                            ))}
+                            {suggestions.map((suggestion, index) => {
+                                return (
+                                    <Link
+                                        to={
+                                            "/results?search_query=" +
+                                            suggestion
+                                        }
+                                        key={index}
+                                    >
+                                        <li
+                                            className="py-2 px-5 flex shadow-sm hover:bg-gray-100"
+                                            onClick={() => {
+                                                inputRef.current.value =
+                                                    suggestion;
+
+                                                setSearchQuery(suggestion);
+                                            }}
+                                        >
+                                            <img
+                                                alt="Search"
+                                                className="h-5 mr-2"
+                                                src="https://www.svgrepo.com/show/114667/search.svg"
+                                            />
+
+                                            {suggestion}
+                                        </li>
+                                    </Link>
+                                );
+                            })}
                         </ul>
                     </div>
                 )}

@@ -49,6 +49,10 @@ ReactTube is a front-end project built with the React framework and related tech
 
 -   **Caching Search Results:** Used for later reusability, saves repeated API Calls.
 
+-   **N-Level Comments:** Based on mockData, comments are list down for the video, use Recursion for Nested comments.
+
+-   **Search Videos:** Search bar functionality to view results and play videos.
+
 ## Getting Started
 
 1. Clone the repository:
@@ -81,7 +85,9 @@ ReactTube is a front-end project built with the React framework and related tech
 
 ```
 **Home Page**
+    - Shimmer UI
     - Header
+        - Search Function
     - Body
     - Sidebar
         - MenuItems
@@ -94,7 +100,16 @@ ReactTube is a front-end project built with the React framework and related tech
 
 ```
 **Watch Page**
+    - Shimmer UI
     - Video Frame
+    - Video Information
+    - N-Level Comments
+```
+
+```
+**Search Page**
+    - Shimmer UI
+    - Search Results
 ```
 
 ## Acknowledgments
