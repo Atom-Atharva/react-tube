@@ -9,12 +9,12 @@ import ShimmerSearchCard from "./ShimmerSearchCard";
 const SearchVideosList = () => {
     const dispatch = useDispatch();
     const [searchParams] = useSearchParams();
-    const [videos, setVideos] = useState([]);
+    const [videos, setVideos] = useState(null);
 
     useEffect(() => {
         dispatch(openMenu());
         getVideos(searchParams.get("search_query"));
-    }, []);
+    }, [searchParams.get("search_query")]);
 
     const getVideos = async (searchQuery) => {
         const data = await fetch(YOUTUBE_SEARCH_VIDEOS + searchQuery);
@@ -23,7 +23,7 @@ const SearchVideosList = () => {
         setVideos(json.items);
     };
 
-    return videos.length === 0 ? (
+    return videos == null ? (
         <div>
             <ShimmerSearchCard />
             <ShimmerSearchCard />

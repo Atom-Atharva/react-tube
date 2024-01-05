@@ -53,6 +53,8 @@ ReactTube is a front-end project built with the React framework and related tech
 
 -   **Search Videos:** Search bar functionality to view results and play videos.
 
+-   **Live Chat:** Redux Functionality, Add Comment to live Chat, API Poling (Calling API in intervals).
+
 ## Getting Started
 
 1. Clone the repository:

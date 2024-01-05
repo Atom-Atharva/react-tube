@@ -6,6 +6,7 @@ import { YOUTUBE_API_CHANNEL, YOUTUBE_VIDEO_API } from "../utils/constant";
 import CommentList from "./CommentList";
 import comments from "../utils/mockDataComments";
 import ShimmerWatchPage from "./ShimmerWatchPage";
+import LiveChat from "./LiveChat";
 
 const WatchPage = () => {
     const [searchParams] = useSearchParams();
@@ -42,21 +43,27 @@ const WatchPage = () => {
     return videoData === null ? (
         <ShimmerWatchPage />
     ) : (
-        <div className="px-24 py-6">
-            <iframe
-                width="976"
-                height="549"
-                className="rounded-xl"
-                src={
-                    "https://www.youtube.com/embed/" +
-                    searchParams.get("v") +
-                    "?si=Jb4TyPbW-xxmZrLS&autoplay=1"
-                }
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-            ></iframe>
+        <div className="px-24 py-6 w-full">
+            <div className="flex">
+                <div>
+                    <iframe
+                        width="976"
+                        height="549"
+                        className="rounded-xl"
+                        src={
+                            "https://www.youtube.com/embed/" +
+                            searchParams.get("v") +
+                            "?si=Jb4TyPbW-xxmZrLS&autoplay=1"
+                        }
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                    ></iframe>
+                </div>
+                <LiveChat />
+            </div>
+
             <div className="my-4">
                 <h1 className="font-semibold text-xl">{title}</h1>
                 <div className="flex">
